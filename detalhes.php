@@ -27,7 +27,7 @@
     </head>
     <body>
         <header>
-        <button class="alterar" onclick="location.href='alterar.php?$titulo=$user_data[nome]'"></button>
+        <button class="alterar" id="alterarButton"></button>
         </header>
         <main>
             <div class="detalhes">
@@ -39,6 +39,7 @@
                 $query = "SELECT * FROM tbl_upload WHERE id = $imageId";
                 $result = mysqli_query($conexaor, $query);
                 if ($row = mysqli_fetch_array($result)){
+                    $titulo = $row['titulo']; 
                 ?>
                 <div class="img">
                     <div class="imgUpload">
@@ -82,4 +83,13 @@
             </div>
         </main>  
     </body>
+    <script>
+        document.getElementById("alterarButton").addEventListener("click", function() {
+            <?php
+            if (isset($row['titulo'])) {
+                echo "location.href = 'alterar.php?titulo=" . urlencode($row['titulo']) . "';";
+            }
+            ?>
+            });
+    </script>
 </html>
