@@ -7,29 +7,28 @@
         <style>
             .btnAva {
                 display: inline-block;          
-            }
-            .btnAva input {
-                display: none;
-                direction: ltr;
-            }
-            .btnAva label {
-                font-size: 24px;
-                cursor: pointer;
-                color: #4B1B0D;
-            }
-            .btnAva label:before {
-                content: '\2605'; 
-            }
-            .estrela5 ~ .estrela5:before{
-                content: '\2606';
-            }
-            .btnAva input:checked ~ label:before {
-                content: '\2605';    
-            }
-            .btnAva label:hover ~ label:before {
-                content: '\2606';    
-            }
-
+        }
+        .btnAva input {
+            display: none;
+            direction: ltr;
+        }
+        .btnAva label {
+            font-size: 24px;
+            cursor: pointer;
+            color: #4B1B0D;
+         }
+         .btnAva label:before {
+             content: '\2605'; 
+        }
+        .btnAva label:hover:before{
+            content: '\2606';
+        }
+        .btnAva input:checked ~ label:before {
+            content: '\2605';    
+        }
+        .btnAva input:checked ~ label ~ label:before {
+            content: '\2606';    
+        }
         </style>
     </head>
     <body>
