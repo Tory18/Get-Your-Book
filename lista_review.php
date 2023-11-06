@@ -6,8 +6,13 @@ if(!empty($_GET['search'])){
 }
 else{
     $sql = "SELECT * FROM tbl_upload ORDER BY id DESC";
+    $search = "";
 }
 $result = $conexaor->query($sql);
+if (isset($_GET['clear'])) {
+    header("Location: lista_review.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,7 +74,7 @@ $result = $conexaor->query($sql);
 <body>
 <header>
     <div class="navbar">
-        <ul>
+        <ul>_____
             <li><a href="lista_review.php">Minhas Reviews</a></li>
             <li><a href="sobreNós.html">Sobre nós</a></li>
         </ul>
@@ -80,48 +85,53 @@ $result = $conexaor->query($sql);
         <div class="box">
             <div id="telaDeReview">
                 <div class="box-search">
-                    <input type="search" class="procurar" placeholder="Pesquisar" id="procurar">
+                    <input type="search" class="procurar" placeholder="Pesquisar" id="procurar" value="<?php echo $search; ?>">
                     <button onclick="searchData()" class="btn"></button>
+                    <?php
+                        if (!empty($search)) {
+                            echo '<a href="lista_review.php?clear=1">Limpar Pesquisa</a>';
+                        }
+                        ?>
                 </div>
                 <p></p>
                 <button class="adicionar" onclick="location.href='formulario_review.html'"></button>
 
                 <?php
-                include "conexaoReview.php";
-                $query = "SELECT * FROM tbl_upload ORDER BY id DESC";
-                $data = mysqli_query($conexaor, $query);
-                if ($data) {
-                    while ($row = mysqli_fetch_assoc($data)) {
-                        ?>
-                        <div class="img">
-                            <div class="imgUpload">
-                            <a href="detalhes.php?id=<?php echo $row['id']; ?>">
-                                <img src="<?php echo $_SERVER['DOCUMENT_ROOT'] . 'file/' . $row['imagemEntrada']; ?>" style="width: 100%;">
-                            </a>
-                            <button class="remover" onclick="selecionarParaExcluir(<?php echo $row['id']; ?>)"></button>
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            ?>
+                            <div class="img">
+                                <div class="imgUpload">
+                                    <a href="detalhes.php?id=<?php echo $row['id']; ?>">
+                                        <img src="file/<?php echo $row['imagemEntrada']; ?>" style="width: 100%;">
+                                    </a>
+
+                                    <button class="remover" onclick="selecionarParaExcluir(<?php echo $row['id']; ?>)"></button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="inputBox">
-                            <label for="labelTitulo" name="labelTitulo" id="labelTitulo"><?php echo $row['titulo']; ?></label>
-                        </div>
-                        <div class="inputBox">
-                            <label for="labelAvaliacao" name="labelAvaliacao" id="labelAvaliacao">
-                                <?php
-                                $avaliacao = $row['avaliacao'];
-                                for ($i = 1; $i <= 5; $i++) {
-                                    if ($i <= $avaliacao) {
-                                        echo '<span class="star-filled">★</span>';
-                                    } else {
-                                        echo '<span class="star-unfilled">☆</span>';
+                            <div class="inputBox">
+                                <label for="labelTitulo" name="labelTitulo" id="labelTitulo"><?php echo $row['titulo']; ?></label>
+                            </div>
+                            <div class="inputBox">
+                                <label for="labelAvaliacao" name="labelAvaliacao" id="labelAvaliacao">
+                                    <?php
+                                    $avaliacao = $row['avaliacao'];
+                                    for ($i = 1; $i <= 5; $i++) {
+                                        if ($i <= $avaliacao) {
+                                            echo '<span class="star-filled">★</span>';
+                                        } else {
+                                            echo '<span class="star-unfilled">☆</span>';
+                                        }
                                     }
-                                }
-                                ?>
-                            </label>
-                        </div>
-                        <?php
+                                    ?>
+                                </label>
+                            </div>
+                            <?php
+                        }
+                    } else {
+                        echo "Nenhum resultado encontrado.";
                     }
-                }
-                ?>
+                    ?>
             </div>
         </div>
     </section>
